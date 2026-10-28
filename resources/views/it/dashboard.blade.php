@@ -22,7 +22,7 @@
 
     {{-- STATISTIK --}}
 
-    <div class="row g-4">
+    <div class="row g-3 dashboard-stats">
 
         {{-- Assigned --}}
 

@@ -80,6 +80,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if ($category->tickets()->exists()) {
+            return back()
+                ->withErrors([
+                    'category' => 'Kategori tidak dapat dihapus karena masih digunakan oleh ticket.',
+                ]);
+        }
+
         $category->delete();
 
         return redirect()

@@ -171,6 +171,7 @@ class TicketController extends Controller
         ]);
 
         $itSupports = collect();
+        $categories = collect();
 
         if (auth()->user()->role === 'admin') {
             $itSupports = User::where(
@@ -179,13 +180,16 @@ class TicketController extends Controller
             )
                 ->orderBy('name')
                 ->get();
+
+            $categories = Category::orderBy('name')->get();
         }
 
         return view(
             'tickets.show',
             compact(
                 'ticket',
-                'itSupports'
+                'itSupports',
+                'categories'
             )
         );
     }
@@ -197,6 +201,8 @@ class TicketController extends Controller
     public function edit(Ticket $ticket)
     {
         $this->authorizeTicket($ticket);
+
+        abort_unless(auth()->user()->role === 'user', 403);
 
         $categories = Category::orderBy('name')->get();
 

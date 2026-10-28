@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketCommentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 
 /*
@@ -51,6 +52,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         '/categories',
         CategoryController::class
     );
+
+    Route::resource(
+        '/admin/users',
+        AdminUserController::class
+    )->except(['show'])->names('admin.users');
 });
 
 

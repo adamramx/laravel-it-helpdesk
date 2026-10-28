@@ -1,109 +1,65 @@
-<div class="bg-dark text-white p-3"
-     style="width: 250px; min-height: 100vh;">
+@php
+    $role = auth()->user()->role;
+    $dashboardRoute = match ($role) {
+        'admin' => 'admin.dashboard',
+        'it_support' => 'it.dashboard',
+        default => 'user.dashboard',
+    };
+@endphp
 
-    <h4 class="mb-4">
-        🛠 IT Helpdesk
-    </h4>
+<div class="sidebar-inner">
+    <a href="{{ route($dashboardRoute) }}" class="sidebar-brand">
+        <span class="brand-mark" aria-hidden="true">H</span>
+        <span>
+            <strong>Helpdesk</strong>
+            <small>IT Service Portal</small>
+        </span>
+    </a>
 
-    <hr>
-
-    <ul class="nav nav-pills flex-column gap-2">
-
-        {{-- Dashboard --}}
-        <li class="nav-item">
-
-            <a href="{{ route('dashboard') }}"
-               class="nav-link text-white">
-
-                📊 Dashboard
-
+    <div class="sidebar-section-label">MENU</div>
+    <nav class="sidebar-nav" aria-label="Navigasi utama">
+        <a href="{{ route($dashboardRoute) }}"
+           class="sidebar-link {{ request()->routeIs('dashboard', 'admin.dashboard', 'it.dashboard', 'user.dashboard') ? 'active' : '' }}">
+            <span class="sidebar-icon" aria-hidden="true">⌂</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ route('tickets.index') }}"
+           class="sidebar-link {{ request()->routeIs('tickets.*') ? 'active' : '' }}">
+            <span class="sidebar-icon" aria-hidden="true">▤</span>
+            <span>Tickets</span>
+        </a>
+        @if($role === 'admin')
+            <a href="{{ route('categories.index') }}"
+               class="sidebar-link {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+                <span class="sidebar-icon" aria-hidden="true">◇</span>
+                <span>Kategori</span>
             </a>
-
-        </li>
-
-
-        {{-- Ticket --}}
-        <li class="nav-item">
-
-            <a href="{{ route('tickets.index') }}"
-                class="nav-link text-white">
-
-                🎫 Tickets
-
+            <a href="{{ route('admin.users.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                <span class="sidebar-icon" aria-hidden="true">◎</span>
+                <span>Pengguna</span>
             </a>
-
-        </li>
-
-
-        {{-- Category --}}
-        @if(auth()->user()->role === 'admin')
-
-            <li class="nav-item">
-
-                <a href="#"
-                   class="nav-link text-white">
-
-                    📂 Categories
-
-                </a>
-
-            </li>
-
         @endif
+        <a href="{{ route('notifications.index') }}"
+           class="sidebar-link {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
+            <span class="sidebar-icon" aria-hidden="true">♧</span>
+            <span>Notifikasi</span>
+        </a>
+    </nav>
 
-
-        {{-- Users --}}
-        @if(auth()->user()->role === 'admin')
-
-            <li class="nav-item">
-
-                <a href="#"
-                   class="nav-link text-white">
-
-                    👥 Users
-
-                </a>
-
-            </li>
-
-        @endif
-
-
-        {{-- Reports --}}
-        @if(in_array(auth()->user()->role, ['admin', 'it_support']))
-
-            <li class="nav-item">
-
-                <a href="{{ route('categories.index') }}"
-                     class="nav-link text-white">
-
-                     📂 Categories
-
-                </a>
-
-            </li>
-
-        @endif
-
-    </ul>
-
-
-    <hr>
-
-
-    {{-- Logout --}}
-
-    <form method="POST" action="{{ route('logout') }}">
-
-        @csrf
-
-        <button type="submit"
-                class="btn btn-danger w-100">
-
-            🚪 Logout
-
-        </button>
-
-    </form>
-
+    <div class="sidebar-bottom">
+        <div class="sidebar-user">
+            <span class="user-avatar">{{ mb_substr(auth()->user()->name, 0, 1) }}</span>
+            <span class="sidebar-user-info">
+                <strong>{{ auth()->user()->name }}</strong>
+                <small>{{ str($role)->replace('_', ' ')->title() }}</small>
+            </span>
+        </div>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="sidebar-logout">
+                <span aria-hidden="true">↪</span> Keluar
+            </button>
+        </form>
+    </div>
 </div>

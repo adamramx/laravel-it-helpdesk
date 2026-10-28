@@ -17,6 +17,18 @@
 
         <div class="card-body">
 
+            @if($errors->any())
+
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+
+            @endif
+
             <form action="{{ route('tickets.update', $ticket) }}"
                   method="POST">
 
@@ -37,7 +49,7 @@
                         @foreach($categories as $category)
 
                             <option value="{{ $category->id }}"
-                                @selected($ticket->category_id == $category->id)>
+                                @selected(old('category_id', $ticket->category_id) == $category->id)>
 
                                 {{ $category->name }}
 
@@ -58,7 +70,7 @@
 
                     <input type="text"
                            name="title"
-                           value="{{ $ticket->title }}"
+                           value="{{ old('title', $ticket->title) }}"
                            class="form-control">
 
                 </div>
@@ -72,7 +84,7 @@
 
                     <textarea name="description"
                               rows="6"
-                              class="form-control">{{ $ticket->description }}</textarea>
+                              class="form-control">{{ old('description', $ticket->description) }}</textarea>
 
                 </div>
 
@@ -87,21 +99,21 @@
                             class="form-select">
 
                         <option value="low"
-                            @selected($ticket->priority === 'low')>
+                            @selected(old('priority', $ticket->priority) === 'low')>
 
                             Low
 
                         </option>
 
                         <option value="medium"
-                            @selected($ticket->priority === 'medium')>
+                            @selected(old('priority', $ticket->priority) === 'medium')>
 
                             Medium
 
                         </option>
 
                         <option value="high"
-                            @selected($ticket->priority === 'high')>
+                            @selected(old('priority', $ticket->priority) === 'high')>
 
                             High
 

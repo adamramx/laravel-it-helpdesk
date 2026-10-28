@@ -39,11 +39,8 @@
 
 
             @if(
-                auth()->user()->role === 'admin'
-                || (
-                    auth()->user()->role === 'user'
-                    && $ticket->user_id === auth()->id()
-                )
+                auth()->user()->role === 'user'
+                && $ticket->user_id === auth()->id()
             )
 
                 <a
@@ -74,6 +71,19 @@
                 data-bs-dismiss="alert"
             ></button>
 
+        </div>
+
+    @endif
+
+
+    @if($errors->any())
+
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
 
     @endif
@@ -387,14 +397,13 @@
                                 >
 
                                     @foreach(
-                                        \App\Models\Category::orderBy('name')->get()
-                                        as $category
+                                        $categories as $category
                                     )
 
                                         <option
                                             value="{{ $category->id }}"
                                             @selected(
-                                                $ticket->category_id === $category->id
+                                                old('category_id', $ticket->category_id) == $category->id
                                             )
                                         >
                                             {{ $category->name }}
@@ -419,7 +428,7 @@
                                     type="text"
                                     name="title"
                                     class="form-control"
-                                    value="{{ $ticket->title }}"
+                                    value="{{ old('title', $ticket->title) }}"
                                     required
                                 >
 
@@ -439,7 +448,7 @@
                                     class="form-control"
                                     rows="4"
                                     required
-                                >{{ $ticket->description }}</textarea>
+                                >{{ old('description', $ticket->description) }}</textarea>
 
                             </div>
 
@@ -459,21 +468,21 @@
 
                                     <option
                                         value="low"
-                                        @selected($ticket->priority === 'low')
+                                        @selected(old('priority', $ticket->priority) === 'low')
                                     >
                                         Low
                                     </option>
 
                                     <option
                                         value="medium"
-                                        @selected($ticket->priority === 'medium')
+                                        @selected(old('priority', $ticket->priority) === 'medium')
                                     >
                                         Medium
                                     </option>
 
                                     <option
                                         value="high"
-                                        @selected($ticket->priority === 'high')
+                                        @selected(old('priority', $ticket->priority) === 'high')
                                     >
                                         High
                                     </option>
@@ -498,28 +507,28 @@
 
                                     <option
                                         value="open"
-                                        @selected($ticket->status === 'open')
+                                        @selected(old('status', $ticket->status) === 'open')
                                     >
                                         Open
                                     </option>
 
                                     <option
                                         value="processing"
-                                        @selected($ticket->status === 'processing')
+                                        @selected(old('status', $ticket->status) === 'processing')
                                     >
                                         Processing
                                     </option>
 
                                     <option
                                         value="resolved"
-                                        @selected($ticket->status === 'resolved')
+                                        @selected(old('status', $ticket->status) === 'resolved')
                                     >
                                         Resolved
                                     </option>
 
                                     <option
                                         value="closed"
-                                        @selected($ticket->status === 'closed')
+                                        @selected(old('status', $ticket->status) === 'closed')
                                     >
                                         Closed
                                     </option>
@@ -552,7 +561,7 @@
                                         <option
                                             value="{{ $itSupport->id }}"
                                             @selected(
-                                                $ticket->assigned_to === $itSupport->id
+                                                old('assigned_to', $ticket->assigned_to) == $itSupport->id
                                             )
                                         >
                                             {{ $itSupport->name }}

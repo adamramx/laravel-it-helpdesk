@@ -1,144 +1,33 @@
-<nav class="navbar navbar-light bg-white shadow-sm px-4">
+@php
+    $unreadNotifications = auth()->user()->notifications()->where('is_read', false)->count();
+@endphp
 
-    {{-- BRAND --}}
-    <div>
-        <a
-            href="{{ route('dashboard') }}"
-            class="text-decoration-none text-dark"
-        >
-            <h5 class="mb-0">
-                IT Helpdesk
-            </h5>
-        </a>
+<header class="app-topbar">
+    <div class="topbar-leading">
+        <button class="mobile-menu-button d-lg-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#mobileSidebar" aria-controls="mobileSidebar" aria-label="Buka menu">
+            <span aria-hidden="true">☰</span>
+        </button>
+        <div>
+            <p class="topbar-eyebrow">IT SERVICE PORTAL</p>
+            <h1 class="topbar-title">Helpdesk Workspace</h1>
+        </div>
     </div>
 
-
-    {{-- MENU --}}
-    <div class="d-flex align-items-center gap-3">
-
-        {{-- DASHBOARD --}}
-        @if(auth()->user()->role === 'admin')
-
-            <a
-                href="{{ route('admin.dashboard') }}"
-                class="text-decoration-none text-dark"
-            >
-                Dashboard
-            </a>
-
-        @elseif(auth()->user()->role === 'it_support')
-
-            <a
-                href="{{ route('it.dashboard') }}"
-                class="text-decoration-none text-dark"
-            >
-                Dashboard
-            </a>
-
-        @elseif(auth()->user()->role === 'user')
-
-            <a
-                href="{{ route('user.dashboard') }}"
-                class="text-decoration-none text-dark"
-            >
-                Dashboard
-            </a>
-
-        @endif
-
-
-        {{-- TICKETS --}}
-        <a
-            href="{{ route('tickets.index') }}"
-            class="text-decoration-none text-dark"
-        >
-            Tickets
-        </a>
-
-
-        {{-- CREATE TICKET KHUSUS USER --}}
-        @if(auth()->user()->role === 'user')
-
-            <a
-                href="{{ route('tickets.create') }}"
-                class="text-decoration-none text-dark"
-            >
-                + Buat Ticket
-            </a>
-
-        @endif
-
-
-        {{-- CATEGORY KHUSUS ADMIN --}}
-        @if(auth()->user()->role === 'admin')
-
-            <a
-                href="{{ route('categories.index') }}"
-                class="text-decoration-none text-dark"
-            >
-                Categories
-            </a>
-
-        @endif
-
-
-        {{-- NOTIFICATION --}}
-        @php
-            $unreadNotifications = auth()->user()
-                ->notifications()
-                ->where('is_read', false)
-                ->count();
-        @endphp
-
-        <a
-            href="{{ route('notifications.index') }}"
-            class="btn btn-light position-relative"
-        >
-
-            🔔
-
+    <div class="topbar-actions">
+        <a href="{{ route('notifications.index') }}" class="notification-button"
+           aria-label="Notifikasi{{ $unreadNotifications ? ', '.$unreadNotifications.' belum dibaca' : '' }}">
+            <span aria-hidden="true">♧</span>
             @if($unreadNotifications > 0)
-
-                <span
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                >
-                    {{ $unreadNotifications }}
-                </span>
-
+                <span class="notification-count">{{ $unreadNotifications > 9 ? '9+' : $unreadNotifications }}</span>
             @endif
-
         </a>
-
-
-        {{-- USER NAME --}}
-        <span>
-            {{ auth()->user()->name }}
-        </span>
-
-
-        {{-- ROLE --}}
-        <span class="badge bg-primary">
-            {{ strtoupper(auth()->user()->role) }}
-        </span>
-
-
-        {{-- LOGOUT --}}
-        <form
-            action="{{ route('logout') }}"
-            method="POST"
-            class="d-inline"
-        >
-            @csrf
-
-            <button
-                type="submit"
-                class="btn btn-outline-danger btn-sm"
-            >
-                Logout
-            </button>
-
-        </form>
-
+        <div class="topbar-user d-none d-sm-flex">
+            <span class="user-avatar user-avatar-small">{{ mb_substr(auth()->user()->name, 0, 1) }}</span>
+            <span class="topbar-user-info">
+                <strong>{{ auth()->user()->name }}</strong>
+                <small>{{ str(auth()->user()->role)->replace('_', ' ')->title() }}</small>
+            </span>
+        </div>
     </div>
-
-</nav>
+</header>
