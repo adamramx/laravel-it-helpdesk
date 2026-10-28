@@ -6,14 +6,15 @@
 
 <div class="container-fluid">
 
-    <div class="mb-4">
+    <div class="dashboard-intro">
 
-        <h2>Admin Dashboard</h2>
+        <div>
+            <h2>Dashboard Admin</h2>
 
-        <p class="text-muted mb-0">
-            Selamat datang,
-            <strong>{{ auth()->user()->name }}</strong>
-        </p>
+            <p class="text-muted">
+                Selamat datang kembali, <strong>{{ auth()->user()->name }}</strong>. Berikut ringkasan aktivitas helpdesk.
+            </p>
+        </div>
 
     </div>
 

@@ -6,17 +6,13 @@
 
 <div class="container-fluid">
 
-    <div class="mb-4">
-
-        <h2>IT Support Dashboard</h2>
-
-        <p class="text-muted mb-0">
-
-            Selamat datang,
-            <strong>{{ auth()->user()->name }}</strong>
-
-        </p>
-
+    <div class="dashboard-intro">
+        <div>
+            <h2>Dashboard IT Support</h2>
+            <p class="text-muted">
+                Selamat datang kembali, <strong>{{ auth()->user()->name }}</strong>. Pantau tiket yang perlu ditangani.
+            </p>
+        </div>
     </div>
 
 

@@ -10,19 +10,13 @@
     {{-- HEADER --}}
     {{-- ========================================================= --}}
 
-    <div class="mb-4">
-
-        <h2>
-            User Dashboard
-        </h2>
-
-        <p class="text-muted">
-
-            Selamat datang,
-            <strong>{{ auth()->user()->name }}</strong>
-
-        </p>
-
+    <div class="dashboard-intro">
+        <div>
+            <h2>Dashboard Saya</h2>
+            <p class="text-muted">
+                Selamat datang kembali, <strong>{{ auth()->user()->name }}</strong>. Buat laporan atau cek perkembangan tiket Anda.
+            </p>
+        </div>
     </div>
 
 
