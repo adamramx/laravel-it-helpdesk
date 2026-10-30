@@ -15,254 +15,124 @@
         </div>
     </div>
 
-
     {{-- STATISTIK --}}
-
     <div class="row g-3 dashboard-stats">
 
         {{-- Assigned --}}
-
         <div class="col-md-4">
-
             <div class="card border-0 shadow-sm">
-
                 <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Assigned Tickets
-                    </h6>
-
-                    <h2 class="mb-1">
-                        {{ $assignedTickets }}
-                    </h2>
-
-                    <small class="text-muted">
-                        Ticket yang ditugaskan kepada Anda
-                    </small>
-
+                    <h6 class="text-muted">Assigned Tickets</h6>
+                    <h2 class="mb-1">{{ $assignedTickets }}</h2>
+                    <small class="text-muted">Ticket yang ditugaskan kepada Anda</small>
                 </div>
-
             </div>
-
         </div>
-
 
         {{-- Processing --}}
-
         <div class="col-md-4">
-
             <div class="card border-0 shadow-sm">
-
                 <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Processing
-                    </h6>
-
-                    <h2 class="mb-1">
-                        {{ $processingTickets }}
-                    </h2>
-
-                    <small class="text-muted">
-                        Sedang ditangani
-                    </small>
-
+                    <h6 class="text-muted">Processing</h6>
+                    <h2 class="mb-1">{{ $processingTickets }}</h2>
+                    <small class="text-muted">Sedang ditangani</small>
                 </div>
-
             </div>
-
         </div>
 
-
         {{-- Resolved --}}
-
         <div class="col-md-4">
-
             <div class="card border-0 shadow-sm">
-
                 <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Resolved
-                    </h6>
-
-                    <h2 class="mb-1">
-                        {{ $resolvedTickets }}
-                    </h2>
-
-                    <small class="text-muted">
-                        Ticket yang sudah selesai
-                    </small>
-
+                    <h6 class="text-muted">Resolved</h6>
+                    <h2 class="mb-1">{{ $resolvedTickets }}</h2>
+                    <small class="text-muted">Ticket yang sudah selesai</small>
                 </div>
-
             </div>
-
         </div>
 
     </div>
 
-
     {{-- MY TICKETS --}}
-
     <div class="card border-0 shadow-sm mt-4">
-
         <div class="card-body">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">My Tickets</h5>
 
-                <h5 class="mb-0">
-                    My Tickets
-                </h5>
-
-                <a
-                    href="{{ route('tickets.index') }}"
-                    class="btn btn-sm btn-primary"
-                >
+                <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-primary">
                     Lihat Semua
                 </a>
-
             </div>
 
-
             <div class="table-responsive">
-
                 <table class="table table-hover align-middle">
 
                     <thead>
-
                         <tr>
-
                             <th>ID</th>
                             <th>Ticket</th>
                             <th>User</th>
                             <th>Category</th>
                             <th>Priority</th>
                             <th>Status</th>
-
                         </tr>
-
                     </thead>
 
                     <tbody>
-
                         @forelse($recentTickets as $ticket)
 
                             <tr>
+                                <td>#{{ str_pad($ticket->id, 4, '0', STR_PAD_LEFT) }}</td>
 
                                 <td>
-                                    #{{ str_pad($ticket->id, 4, '0', STR_PAD_LEFT) }}
-                                </td>
-
-
-                                <td>
-
-                                    <a
-                                        href="{{ route('tickets.show', $ticket) }}"
-                                        class="text-decoration-none"
-                                    >
-
-                                        <strong>
-                                            {{ $ticket->title }}
-                                        </strong>
-
+                                    <a href="{{ route('tickets.show', $ticket) }}" class="text-decoration-none">
+                                        <strong>{{ $ticket->title }}</strong>
                                     </a>
-
                                 </td>
 
+                                <td>{{ $ticket->user->name }}</td>
+
+                                <td>{{ $ticket->category->name }}</td>
 
                                 <td>
-                                    {{ $ticket->user->name }}
-                                </td>
-
-
-                                <td>
-                                    {{ $ticket->category->name }}
-                                </td>
-
-
-                                <td>
-
                                     @if($ticket->priority === 'high')
-
-                                        <span class="badge bg-danger">
-                                            High
-                                        </span>
-
+                                        <span class="badge bg-danger">High</span>
                                     @elseif($ticket->priority === 'medium')
-
-                                        <span class="badge bg-warning text-dark">
-                                            Medium
-                                        </span>
-
+                                        <span class="badge bg-warning text-dark">Medium</span>
                                     @else
-
-                                        <span class="badge bg-secondary">
-                                            Low
-                                        </span>
-
+                                        <span class="badge bg-secondary">Low</span>
                                     @endif
-
                                 </td>
-
 
                                 <td>
-
                                     @if($ticket->status === 'open')
-
-                                        <span class="badge bg-primary">
-                                            Open
-                                        </span>
-
+                                        <span class="badge bg-primary">Open</span>
                                     @elseif($ticket->status === 'processing')
-
-                                        <span class="badge bg-warning text-dark">
-                                            Processing
-                                        </span>
-
+                                        <span class="badge bg-warning text-dark">Processing</span>
                                     @elseif($ticket->status === 'resolved')
-
-                                        <span class="badge bg-success">
-                                            Resolved
-                                        </span>
-
+                                        <span class="badge bg-success">Resolved</span>
                                     @else
-
-                                        <span class="badge bg-secondary">
-                                            Closed
-                                        </span>
-
+                                        <span class="badge bg-secondary">Closed</span>
                                     @endif
-
                                 </td>
-
                             </tr>
 
                         @empty
 
                             <tr>
-
-                                <td
-                                    colspan="6"
-                                    class="text-center py-5 text-muted"
-                                >
-
+                                <td colspan="6" class="text-center py-5 text-muted">
                                     Belum ada ticket yang ditugaskan.
-
                                 </td>
-
                             </tr>
 
                         @endforelse
-
                     </tbody>
 
                 </table>
-
             </div>
 
         </div>
-
     </div>
 
 </div>
